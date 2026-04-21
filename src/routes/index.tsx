@@ -59,7 +59,7 @@ function HomePage() {
               <span className="h-1.5 w-1.5 rounded-full bg-primary-glow animate-pulse" />
               Building the future of digital business
             </span>
-            <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.1]">
+            <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.1]" style={{ fontFamily: '"Orbitron", sans-serif' }}>
               Digital solutions that <span className="text-gradient-primary">solve real problems.</span>
             </h1>
             <p className="mt-6 text-lg text-white/75 max-w-2xl leading-relaxed">
