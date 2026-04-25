@@ -10,6 +10,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import heroImage from "@/assets/hero.jpg";
+import { Logos3 } from "@/components/ui/logos3";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -82,6 +83,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Trusted-by logos carousel */}
+      <Logos3 heading="Trusted by modern teams" />
 
       {/* Stats */}
       <section className="border-y border-border bg-surface">

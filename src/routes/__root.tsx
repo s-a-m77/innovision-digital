@@ -3,6 +3,8 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import appCss from "../styles.css?url";
 import { ScrollNavigationMenu } from "@/components/ui/scroll-navigation-menu";
 import { SiteFooter } from "@/components/SiteFooter";
+import { AuthProvider } from "@/hooks/use-auth";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -63,12 +65,15 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <ScrollNavigationMenu />
-      <main className="flex-1 pt-16">
-        <Outlet />
-      </main>
-      <SiteFooter />
-    </div>
+    <AuthProvider>
+      <div className="flex min-h-screen flex-col bg-background">
+        <ScrollNavigationMenu />
+        <main className="flex-1 pt-16">
+          <Outlet />
+        </main>
+        <SiteFooter />
+        <Toaster richColors position="top-right" />
+      </div>
+    </AuthProvider>
   );
 }

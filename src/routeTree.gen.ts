@@ -12,7 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -29,41 +36,132 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServicesRoute = AdminServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsRoute = AdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/products': typeof ProductsRoute
   '/services': typeof ServicesRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/products': typeof ProductsRoute
   '/services': typeof ServicesRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/products': typeof ProductsRoute
   '/services': typeof ServicesRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contact' | '/products' | '/services'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/blog'
+    | '/contact'
+    | '/products'
+    | '/services'
+    | '/admin/messages'
+    | '/admin/products'
+    | '/admin/services'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/products' | '/services'
-  id: '__root__' | '/' | '/contact' | '/products' | '/services'
+  to:
+    | '/'
+    | '/auth'
+    | '/blog'
+    | '/contact'
+    | '/products'
+    | '/services'
+    | '/admin/messages'
+    | '/admin/products'
+    | '/admin/services'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/blog'
+    | '/contact'
+    | '/products'
+    | '/services'
+    | '/admin/messages'
+    | '/admin/products'
+    | '/admin/services'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   ProductsRoute: typeof ProductsRoute
   ServicesRoute: typeof ServicesRoute
@@ -92,6 +190,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -99,11 +218,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/services': {
+      id: '/admin/services'
+      path: '/services'
+      fullPath: '/admin/services'
+      preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminProductsRoute: typeof AdminProductsRoute
+  AdminServicesRoute: typeof AdminServicesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminMessagesRoute: AdminMessagesRoute,
+  AdminProductsRoute: AdminProductsRoute,
+  AdminServicesRoute: AdminServicesRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AuthRoute: AuthRoute,
+  BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   ProductsRoute: ProductsRoute,
   ServicesRoute: ServicesRoute,
@@ -111,12 +277,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
