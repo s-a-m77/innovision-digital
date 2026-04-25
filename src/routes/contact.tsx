@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle2, Loader2 } from "lucide-react";
 import { z } from "zod";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -29,13 +31,14 @@ function ContactPage() {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const result = contactSchema.safeParse(form);
     if (!result.success) {
@@ -48,6 +51,19 @@ function ContactPage() {
       return;
     }
     setErrors({});
+    setSubmitting(true);
+    const { error } = await supabase.from("contact_submissions").insert({
+      name: result.data.name,
+      email: result.data.email,
+      company: result.data.company || null,
+      message: result.data.message,
+    });
+    setSubmitting(false);
+    if (error) {
+      toast.error("Couldn't send your message. Please try again.");
+      return;
+    }
+    toast.success("Message sent — we'll be in touch.");
     setSubmitted(true);
     setForm(initialState);
   }
@@ -194,9 +210,11 @@ function ContactPage() {
 
                   <button
                     type="submit"
-                    className="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-elegant transition-smooth hover:shadow-glow hover:scale-[1.01]"
+                    disabled={submitting}
+                    className="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-elegant transition-smooth hover:shadow-glow hover:scale-[1.01] disabled:opacity-60"
                   >
-                    Send message <Send className="h-4 w-4" />
+                    {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                    {submitting ? "Sending…" : "Send message"}
                   </button>
                 </>
               )}
