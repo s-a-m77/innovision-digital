@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
       { title: "Products — Nexora" },
-      { name: "description", content: "Discover Nexora's product suite: NexCRM, FlowOps, InsightAI, and SecureGate — built to power modern digital business." },
+      { name: "description", content: "Discover Nexora's product suite — built to power modern digital business." },
       { property: "og:title", content: "Products — Nexora" },
       { property: "og:description", content: "Modern products for sales, operations, intelligence, and security." },
     ],
@@ -13,38 +15,35 @@ export const Route = createFileRoute("/products")({
   component: ProductsPage,
 });
 
-const products = [
-  {
-    name: "NexCRM",
-    tag: "Sales Platform",
-    desc: "An intuitive CRM that gives your sales team a single source of truth — pipelines, automations, and insights without the bloat.",
-    features: ["Visual pipelines", "AI lead scoring", "Email & calendar sync", "Custom workflows"],
-    accent: false,
-  },
-  {
-    name: "FlowOps",
-    tag: "Operations",
-    desc: "Automate repetitive operations work with no-code flows that connect your tools and trigger actions in real time.",
-    features: ["Visual flow builder", "200+ integrations", "Real-time triggers", "Audit logging"],
-    accent: true,
-  },
-  {
-    name: "InsightAI",
-    tag: "Analytics",
-    desc: "Ask questions of your data in plain language. InsightAI delivers dashboards, anomaly detection, and forecasts in seconds.",
-    features: ["Natural language queries", "Auto dashboards", "Anomaly detection", "Forecasting"],
-    accent: false,
-  },
-  {
-    name: "SecureGate",
-    tag: "Security",
-    desc: "Identity, access, and threat detection unified into a single platform — protect users, apps, and APIs from day one.",
-    features: ["SSO & MFA", "Threat detection", "API protection", "Compliance reports"],
-    accent: false,
-  },
-];
+interface Product {
+  id: string;
+  name: string;
+  tag: string | null;
+  description: string;
+  features: string[];
+  accent: boolean;
+}
 
 function ProductsPage() {
+  const [items, setItems] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const { data } = await supabase
+        .from("products")
+        .select("id,name,tag,description,features,accent")
+        .eq("active", true)
+        .order("sort_order");
+      if (mounted) {
+        setItems(data ?? []);
+        setLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   return (
     <>
       <section className="bg-gradient-hero">
@@ -60,48 +59,54 @@ function ProductsPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid md:grid-cols-2 gap-6">
-          {products.map((p) => (
-            <article
-              key={p.name}
-              className={`group p-8 rounded-2xl border transition-smooth hover:-translate-y-1 ${
-                p.accent
-                  ? "bg-gradient-primary text-primary-foreground border-transparent shadow-glow hover:shadow-elegant"
-                  : "bg-card text-card-foreground border-border shadow-card hover:shadow-elegant"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className={`text-xs font-semibold uppercase tracking-wider ${p.accent ? "text-primary-foreground/80" : "text-primary-glow"}`}>
-                  {p.tag}
-                </span>
-              </div>
-              <h2 className="mt-3 text-2xl font-bold tracking-tight">{p.name}</h2>
-              <p className={`mt-3 text-sm leading-relaxed ${p.accent ? "text-primary-foreground/85" : "text-muted-foreground"}`}>
-                {p.desc}
-              </p>
+        {loading ? (
+          <div className="flex justify-center py-16 text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin" /></div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-6">
+            {items.map((p) => (
+              <article
+                key={p.id}
+                className={`group p-8 rounded-2xl border transition-smooth hover:-translate-y-1 animate-fade-in ${
+                  p.accent
+                    ? "bg-gradient-primary text-primary-foreground border-transparent shadow-glow hover:shadow-elegant"
+                    : "bg-card text-card-foreground border-border shadow-card hover:shadow-elegant"
+                }`}
+              >
+                {p.tag && (
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${p.accent ? "text-primary-foreground/80" : "text-primary-glow"}`}>
+                    {p.tag}
+                  </span>
+                )}
+                <h2 className="mt-3 text-2xl font-bold tracking-tight">{p.name}</h2>
+                <p className={`mt-3 text-sm leading-relaxed ${p.accent ? "text-primary-foreground/85" : "text-muted-foreground"}`}>
+                  {p.description}
+                </p>
 
-              <ul className="mt-6 grid grid-cols-2 gap-2">
-                {p.features.map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-sm">
-                    <Check className={`h-4 w-4 shrink-0 ${p.accent ? "text-primary-foreground" : "text-primary-glow"}`} />
-                    {f}
-                  </li>
-                ))}
-              </ul>
+                {p.features.length > 0 && (
+                  <ul className="mt-6 grid grid-cols-2 gap-2">
+                    {p.features.map((f) => (
+                      <li key={f} className="flex items-center gap-2 text-sm">
+                        <Check className={`h-4 w-4 shrink-0 ${p.accent ? "text-primary-foreground" : "text-primary-glow"}`} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                )}
 
-              <div className="mt-7">
-                <Link
-                  to="/contact"
-                  className={`inline-flex items-center gap-2 text-sm font-semibold transition-smooth ${
-                    p.accent ? "text-primary-foreground hover:opacity-90" : "text-foreground hover:text-primary-glow"
-                  }`}
-                >
-                  Request a demo <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
+                <div className="mt-7">
+                  <Link
+                    to="/contact"
+                    className={`inline-flex items-center gap-2 text-sm font-semibold transition-smooth ${
+                      p.accent ? "text-primary-foreground hover:opacity-90" : "text-foreground hover:text-primary-glow"
+                    }`}
+                  >
+                    Request a demo <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </>
   );
