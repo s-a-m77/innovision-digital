@@ -1,30 +1,17 @@
 import * as React from "react";
 import { useState } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, Home, Briefcase, Package, Mail, Zap } from "lucide-react";
+import { Menu, X, Zap } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-
-interface MenuItem {
-  id: number;
-  title: string;
-  url: "/" | "/services" | "/products" | "/contact";
-  icon: React.ReactNode;
-}
+import { navMenuItems, type NavMenuItem } from "@/config/navigation";
 
 interface ScrollNavbarProps {
-  menuItems?: MenuItem[];
+  menuItems?: NavMenuItem[];
   className?: string;
 }
 
-const defaultMenuItems: MenuItem[] = [
-  { id: 1, title: "Home", url: "/", icon: <Home className="h-4 w-4" /> },
-  { id: 2, title: "Services", url: "/services", icon: <Briefcase className="h-4 w-4" /> },
-  { id: 3, title: "Products", url: "/products", icon: <Package className="h-4 w-4" /> },
-  { id: 4, title: "Contact", url: "/contact", icon: <Mail className="h-4 w-4" /> },
-];
-
 export const ScrollNavigationMenu: React.FC<ScrollNavbarProps> = ({
-  menuItems = defaultMenuItems,
+  menuItems = navMenuItems,
   className = "",
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
