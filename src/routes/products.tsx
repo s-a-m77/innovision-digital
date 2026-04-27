@@ -1,15 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { ArrowRight, Check, Loader2, ExternalLink, ImageOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
-      { title: "Products — Nexora" },
-      { name: "description", content: "Discover Nexora's product suite — built to power modern digital business." },
-      { property: "og:title", content: "Products — Nexora" },
-      { property: "og:description", content: "Modern products for sales, operations, intelligence, and security." },
+      { title: "Products & Projects — Nexora" },
+      { name: "description", content: "Discover Nexora's product suite and recent project showcase — built to power modern digital business." },
+      { property: "og:title", content: "Products & Projects — Nexora" },
+      { property: "og:description", content: "Modern products and a portfolio of recent work for sales, operations, intelligence, and security." },
     ],
   }),
   component: ProductsPage,
@@ -22,6 +22,16 @@ interface Product {
   description: string;
   features: string[];
   accent: boolean;
+}
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  link_url: string | null;
+  image_1_url: string | null;
+  image_2_url: string | null;
+  image_3_url: string | null;
 }
 
 function ProductsPage() {
