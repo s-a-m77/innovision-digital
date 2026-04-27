@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import heroImage from "@/assets/hero.jpg";
 import { Logos3 } from "@/components/ui/logos3";
+import { CountUp } from "@/components/CountUp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,11 +32,15 @@ const previewServices = [
   { icon: Sparkles, title: "AI Integration", desc: "Embed intelligence into your products with confidence." },
 ];
 
-const stats = [
-  { value: "120+", label: "Projects Delivered" },
-  { value: "45+", label: "Enterprise Clients" },
-  { value: "99.9%", label: "Uptime SLA" },
-  { value: "24/7", label: "Expert Support" },
+type Stat =
+  | { kind: "count"; end: number; suffix?: string; decimals?: number; label: string }
+  | { kind: "static"; value: string; label: string };
+
+const stats: Stat[] = [
+  { kind: "count", end: 120, suffix: "+", label: "Projects Delivered" },
+  { kind: "count", end: 45, suffix: "+", label: "Enterprise Clients" },
+  { kind: "count", end: 99.9, decimals: 1, suffix: "%", label: "Uptime SLA" },
+  { kind: "static", value: "24/7", label: "Expert Support" },
 ];
 
 function HomePage() {
@@ -91,8 +96,14 @@ function HomePage() {
       <section className="border-y border-border bg-surface">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-gradient-primary">{s.value}</div>
+            <div key={s.label} className="text-center animate-fade-in">
+              <div className="text-3xl md:text-4xl font-bold text-gradient-primary tabular-nums">
+                {s.kind === "count" ? (
+                  <CountUp end={s.end} suffix={s.suffix} decimals={s.decimals} />
+                ) : (
+                  s.value
+                )}
+              </div>
               <div className="mt-1 text-sm text-muted-foreground">{s.label}</div>
             </div>
           ))}
