@@ -19,6 +19,7 @@ const adminNav = [
   { to: "/admin", label: "Announcements", icon: Newspaper, exact: true },
   { to: "/admin/services", label: "Services", icon: Briefcase, exact: false },
   { to: "/admin/products", label: "Products", icon: Package, exact: false },
+  { to: "/admin/projects", label: "Projects", icon: FolderKanban, exact: false },
   { to: "/admin/messages", label: "Messages", icon: Inbox, exact: false },
 ] as const;
 
