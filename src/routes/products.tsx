@@ -48,7 +48,7 @@ function ProductsPage() {
     let mounted = true;
     (async () => {
       const [{ data: productsData }, { data: projectsData }] = await Promise.all([
-        supabase.from("products").select("id,name,tag,description,features,accent").eq("active", true).order("sort_order"),
+        supabase.from("products").select("id,name,tag,description,features,accent,link_url,image_1_url,image_2_url,image_3_url").eq("active", true).order("sort_order"),
         supabase.from("projects").select("id,title,description,link_url,image_1_url,image_2_url,image_3_url").eq("active", true).order("sort_order"),
       ]);
       if (mounted) {
