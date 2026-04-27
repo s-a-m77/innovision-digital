@@ -36,19 +36,22 @@ interface Project {
 
 function ProductsPage() {
   const [items, setItems] = useState<Product[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingProjects, setLoadingProjects] = useState(true);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const { data } = await supabase
-        .from("products")
-        .select("id,name,tag,description,features,accent")
-        .eq("active", true)
-        .order("sort_order");
+      const [{ data: productsData }, { data: projectsData }] = await Promise.all([
+        supabase.from("products").select("id,name,tag,description,features,accent").eq("active", true).order("sort_order"),
+        supabase.from("projects").select("id,title,description,link_url,image_1_url,image_2_url,image_3_url").eq("active", true).order("sort_order"),
+      ]);
       if (mounted) {
-        setItems(data ?? []);
+        setItems(productsData ?? []);
+        setProjects((projectsData ?? []) as Project[]);
         setLoading(false);
+        setLoadingProjects(false);
       }
     })();
     return () => { mounted = false; };
