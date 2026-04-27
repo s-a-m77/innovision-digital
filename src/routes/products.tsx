@@ -1,15 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { ArrowRight, Check, Loader2, ExternalLink, ImageOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
-      { title: "Products — Nexora" },
-      { name: "description", content: "Discover Nexora's product suite — built to power modern digital business." },
-      { property: "og:title", content: "Products — Nexora" },
-      { property: "og:description", content: "Modern products for sales, operations, intelligence, and security." },
+      { title: "Products & Projects — Nexora" },
+      { name: "description", content: "Discover Nexora's product suite and recent project showcase — built to power modern digital business." },
+      { property: "og:title", content: "Products & Projects — Nexora" },
+      { property: "og:description", content: "Modern products and a portfolio of recent work for sales, operations, intelligence, and security." },
     ],
   }),
   component: ProductsPage,
@@ -24,21 +24,34 @@ interface Product {
   accent: boolean;
 }
 
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  link_url: string | null;
+  image_1_url: string | null;
+  image_2_url: string | null;
+  image_3_url: string | null;
+}
+
 function ProductsPage() {
   const [items, setItems] = useState<Product[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingProjects, setLoadingProjects] = useState(true);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const { data } = await supabase
-        .from("products")
-        .select("id,name,tag,description,features,accent")
-        .eq("active", true)
-        .order("sort_order");
+      const [{ data: productsData }, { data: projectsData }] = await Promise.all([
+        supabase.from("products").select("id,name,tag,description,features,accent").eq("active", true).order("sort_order"),
+        supabase.from("projects").select("id,title,description,link_url,image_1_url,image_2_url,image_3_url").eq("active", true).order("sort_order"),
+      ]);
       if (mounted) {
-        setItems(data ?? []);
+        setItems(productsData ?? []);
+        setProjects((projectsData ?? []) as Project[]);
         setLoading(false);
+        setLoadingProjects(false);
       }
     })();
     return () => { mounted = false; };
@@ -108,6 +121,87 @@ function ProductsPage() {
           </div>
         )}
       </section>
+
+      <section className="border-t border-border bg-secondary/30">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+          <div className="max-w-2xl">
+            <span className="text-xs font-semibold uppercase tracking-wider text-primary-glow">Projects Showcase</span>
+            <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Recent work we're proud of.</h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed">
+              A selection of projects we've shipped — explore visuals, read the brief, and follow the link to dive in.
+            </p>
+          </div>
+
+          {loadingProjects ? (
+            <div className="flex justify-center py-16 text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin" /></div>
+          ) : projects.length === 0 ? (
+            <p className="mt-12 text-center text-sm text-muted-foreground">No projects published yet.</p>
+          ) : (
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {projects.map((p) => <ProjectCard key={p.id} project={p} />)}
+            </div>
+          )}
+        </div>
+      </section>
     </>
+  );
+}
+
+function ProjectCard({ project }: { project: Project }) {
+  const images = [project.image_1_url, project.image_2_url, project.image_3_url].filter(Boolean) as string[];
+  const [active, setActive] = useState(0);
+
+  return (
+    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-card transition-smooth hover:-translate-y-1 hover:shadow-elegant animate-fade-in">
+      <div className="relative aspect-[16/10] bg-muted overflow-hidden">
+        {images.length > 0 ? (
+          <>
+            {images.map((src, i) => (
+              <img
+                key={src}
+                src={src}
+                alt={`${project.title} screenshot ${i + 1}`}
+                loading="lazy"
+                className={`absolute inset-0 h-full w-full object-cover transition-all duration-500 ${
+                  i === active ? "opacity-100 scale-100" : "opacity-0 scale-105"
+                } group-hover:scale-[1.03]`}
+              />
+            ))}
+            {images.length > 1 && (
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 rounded-full bg-background/80 backdrop-blur px-2 py-1.5">
+                {images.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    aria-label={`Show image ${i + 1}`}
+                    onClick={() => setActive(i)}
+                    className={`h-1.5 rounded-full transition-all ${i === active ? "w-5 bg-primary-glow" : "w-1.5 bg-muted-foreground/40 hover:bg-muted-foreground"}`}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+            <ImageOff className="h-8 w-8" />
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="text-lg font-semibold tracking-tight">{project.title}</h3>
+        <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3">{project.description}</p>
+        {project.link_url && (
+          <a
+            href={project.link_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-glow hover:opacity-80 transition-smooth"
+          >
+            Visit project <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+        )}
+      </div>
+    </article>
   );
 }

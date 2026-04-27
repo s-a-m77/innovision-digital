@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, useNavigate, Link, useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Loader2, LogOut, ShieldAlert, Newspaper, Briefcase, Package, Inbox } from "lucide-react";
+import { Loader2, LogOut, ShieldAlert, Newspaper, Briefcase, Package, Inbox, FolderKanban } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -19,6 +19,7 @@ const adminNav = [
   { to: "/admin", label: "Announcements", icon: Newspaper, exact: true },
   { to: "/admin/services", label: "Services", icon: Briefcase, exact: false },
   { to: "/admin/products", label: "Products", icon: Package, exact: false },
+  { to: "/admin/projects", label: "Projects", icon: FolderKanban, exact: false },
   { to: "/admin/messages", label: "Messages", icon: Inbox, exact: false },
 ] as const;
 
