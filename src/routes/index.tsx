@@ -96,8 +96,14 @@ function HomePage() {
       <section className="border-y border-border bg-surface">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-gradient-primary">{s.value}</div>
+            <div key={s.label} className="text-center animate-fade-in">
+              <div className="text-3xl md:text-4xl font-bold text-gradient-primary tabular-nums">
+                {s.kind === "count" ? (
+                  <CountUp end={s.end} suffix={s.suffix} decimals={s.decimals} />
+                ) : (
+                  s.value
+                )}
+              </div>
               <div className="mt-1 text-sm text-muted-foreground">{s.label}</div>
             </div>
           ))}
