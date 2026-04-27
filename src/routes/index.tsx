@@ -32,11 +32,15 @@ const previewServices = [
   { icon: Sparkles, title: "AI Integration", desc: "Embed intelligence into your products with confidence." },
 ];
 
-const stats = [
-  { value: "120+", label: "Projects Delivered" },
-  { value: "45+", label: "Enterprise Clients" },
-  { value: "99.9%", label: "Uptime SLA" },
-  { value: "24/7", label: "Expert Support" },
+type Stat =
+  | { kind: "count"; end: number; suffix?: string; decimals?: number; label: string }
+  | { kind: "static"; value: string; label: string };
+
+const stats: Stat[] = [
+  { kind: "count", end: 120, suffix: "+", label: "Projects Delivered" },
+  { kind: "count", end: 45, suffix: "+", label: "Enterprise Clients" },
+  { kind: "count", end: 99.9, decimals: 1, suffix: "%", label: "Uptime SLA" },
+  { kind: "static", value: "24/7", label: "Expert Support" },
 ];
 
 function HomePage() {
