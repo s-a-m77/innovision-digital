@@ -88,9 +88,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Trusted-by logos carousel */}
-      <Logos3 heading="Trusted by modern teams" />
-
       {/* Stats */}
       <section className="border-y border-border bg-surface">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
