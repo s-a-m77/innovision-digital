@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, useNavigate, Link, useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Loader2, LogOut, ShieldAlert, Newspaper, Briefcase, Package, Inbox } from "lucide-react";
+import { Loader2, LogOut, ShieldAlert, Newspaper, Briefcase, Package, Inbox, FolderKanban } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
