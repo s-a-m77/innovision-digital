@@ -100,6 +100,13 @@ function AuthPage() {
               : "First user to grant themselves the admin role takes control."}
           </p>
 
+          <div className="mt-4 rounded-md border border-primary/30 bg-primary/5 p-3 text-xs text-muted-foreground">
+            <p className="font-semibold text-foreground">Demo credentials</p>
+            <p className="mt-1">Email: <span className="font-mono text-foreground">admin@nexora.demo</span></p>
+            <p>Password: <span className="font-mono text-foreground">Nexora!2026</span></p>
+            <p className="mt-2 italic">First time? Click <strong>Sign up</strong> with these to create the account, then sign in and visit <span className="font-mono">/admin</span> → "Grant me admin".</p>
+          </div>
+
           <button
             type="button"
             onClick={handleGoogle}
