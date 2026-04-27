@@ -80,48 +80,7 @@ function ProductsPage() {
           <div className="flex justify-center py-16 text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin" /></div>
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
-            {items.map((p) => (
-              <article
-                key={p.id}
-                className={`group p-8 rounded-2xl border transition-smooth hover:-translate-y-1 animate-fade-in ${
-                  p.accent
-                    ? "bg-gradient-primary text-primary-foreground border-transparent shadow-glow hover:shadow-elegant"
-                    : "bg-card text-card-foreground border-border shadow-card hover:shadow-elegant"
-                }`}
-              >
-                {p.tag && (
-                  <span className={`text-xs font-semibold uppercase tracking-wider ${p.accent ? "text-primary-foreground/80" : "text-primary-glow"}`}>
-                    {p.tag}
-                  </span>
-                )}
-                <h2 className="mt-3 text-2xl font-bold tracking-tight">{p.name}</h2>
-                <p className={`mt-3 text-sm leading-relaxed ${p.accent ? "text-primary-foreground/85" : "text-muted-foreground"}`}>
-                  {p.description}
-                </p>
-
-                {p.features.length > 0 && (
-                  <ul className="mt-6 grid grid-cols-2 gap-2">
-                    {p.features.map((f) => (
-                      <li key={f} className="flex items-center gap-2 text-sm">
-                        <Check className={`h-4 w-4 shrink-0 ${p.accent ? "text-primary-foreground" : "text-primary-glow"}`} />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                <div className="mt-7">
-                  <Link
-                    to="/contact"
-                    className={`inline-flex items-center gap-2 text-sm font-semibold transition-smooth ${
-                      p.accent ? "text-primary-foreground hover:opacity-90" : "text-foreground hover:text-primary-glow"
-                    }`}
-                  >
-                    Request a demo <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </article>
-            ))}
+            {items.map((p) => <ProductCard key={p.id} product={p} />)}
           </div>
         )}
       </section>
