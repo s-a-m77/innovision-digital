@@ -22,6 +22,10 @@ interface Product {
   description: string;
   features: string[];
   accent: boolean;
+  link_url: string | null;
+  image_1_url: string | null;
+  image_2_url: string | null;
+  image_3_url: string | null;
 }
 
 interface Project {
