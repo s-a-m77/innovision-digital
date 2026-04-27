@@ -33,7 +33,7 @@ function AdminLayout() {
 
   async function grantSelfAdmin() {
     if (!user) return;
-    const { error } = await supabase.from("user_roles").insert({ user_id: user.id, role: "admin" });
+    const { error } = await supabase.rpc("bootstrap_first_admin");
     if (error) {
       toast.error(error.message);
       return;
