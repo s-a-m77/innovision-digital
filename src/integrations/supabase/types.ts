@@ -88,6 +88,10 @@ export type Database = {
           description: string
           features: string[]
           id: string
+          image_1_url: string | null
+          image_2_url: string | null
+          image_3_url: string | null
+          link_url: string | null
           name: string
           sort_order: number
           tag: string | null
@@ -100,6 +104,10 @@ export type Database = {
           description: string
           features?: string[]
           id?: string
+          image_1_url?: string | null
+          image_2_url?: string | null
+          image_3_url?: string | null
+          link_url?: string | null
           name: string
           sort_order?: number
           tag?: string | null
@@ -112,6 +120,10 @@ export type Database = {
           description?: string
           features?: string[]
           id?: string
+          image_1_url?: string | null
+          image_2_url?: string | null
+          image_3_url?: string | null
+          link_url?: string | null
           name?: string
           sort_order?: number
           tag?: string | null
