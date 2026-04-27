@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import heroImage from "@/assets/hero.jpg";
 import { Logos3 } from "@/components/ui/logos3";
+import { CountUp } from "@/components/CountUp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
