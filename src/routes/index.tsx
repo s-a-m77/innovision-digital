@@ -188,21 +188,95 @@ function HomePage() {
 
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-hero p-10 md:p-16 text-center">
-          <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url(${heroImage})`, backgroundSize: "cover" }} aria-hidden="true" />
-          <div className="relative">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
-              Ready to build something great?
-            </h2>
-            <p className="mt-4 text-white/75 max-w-xl mx-auto">
-              Let's talk about your project. We'll get back to you within one business day.
-            </p>
-            <Link
-              to="/contact"
-              className="mt-8 inline-flex items-center justify-center gap-2 rounded-md bg-gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-smooth hover:scale-[1.02]"
-            >
-              Contact us <ArrowRight className="h-4 w-4" />
-            </Link>
+        <div className="group relative overflow-hidden rounded-[2rem] bg-gradient-hero p-10 md:p-20 shadow-elegant">
+          {/* Ambient background */}
+          <div
+            className="absolute inset-0 opacity-30 transition-opacity duration-700 group-hover:opacity-40"
+            style={{ backgroundImage: `url(${heroImage})`, backgroundSize: "cover", backgroundPosition: "center" }}
+            aria-hidden="true"
+          />
+          {/* Glow orbs */}
+          <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-primary-glow/30 blur-3xl animate-pulse" aria-hidden="true" />
+          <div className="pointer-events-none absolute -bottom-24 -right-16 h-80 w-80 rounded-full bg-primary/40 blur-3xl" aria-hidden="true" />
+          {/* Grid overlay */}
+          <div
+            className="absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+            aria-hidden="true"
+          />
+
+          <div className="relative grid md:grid-cols-[1.4fr_1fr] gap-10 items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+                <Sparkles className="h-3.5 w-3.5 text-primary-glow" />
+                Let's build together
+              </span>
+              <h2 className="mt-5 text-4xl md:text-5xl font-bold tracking-tight text-white leading-[1.05]" style={{ fontFamily: '"Orbitron", sans-serif' }}>
+                Ready to build <span className="text-gradient-primary">something great?</span>
+              </h2>
+              <p className="mt-5 text-white/75 max-w-xl leading-relaxed">
+                Tell us about your project. We reply within one business day with a clear next step — no sales fluff.
+              </p>
+
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center justify-center gap-2 rounded-md bg-gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-smooth hover:scale-[1.03]"
+                >
+                  Start a project <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/services"
+                  className="inline-flex items-center justify-center rounded-md border border-white/25 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition-smooth hover:bg-white/10"
+                >
+                  Browse services
+                </Link>
+              </div>
+
+              <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs text-white/70">
+                {["Reply in < 24h", "Free discovery call", "NDA on request"].map((t) => (
+                  <li key={t} className="inline-flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary-glow" />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Decorative stat card */}
+            <div className="hidden md:block">
+              <div className="relative rounded-2xl border border-white/15 bg-white/5 p-6 backdrop-blur-md shadow-elegant">
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-primary shadow-glow">
+                    <Sparkles className="h-5 w-5 text-primary-foreground" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-white">Currently accepting</div>
+                    <div className="text-xs text-white/60">Q3 · limited slots</div>
+                  </div>
+                </div>
+                <div className="mt-5 space-y-3">
+                  {[
+                    { k: "Avg. response", v: "< 24h" },
+                    { k: "Kickoff", v: "1–2 weeks" },
+                    { k: "Satisfaction", v: "99%" },
+                  ].map((r) => (
+                    <div key={r.k} className="flex items-center justify-between text-sm">
+                      <span className="text-white/60">{r.k}</span>
+                      <span className="font-semibold text-white">{r.v}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                  <div className="h-full w-4/5 bg-gradient-primary" />
+                </div>
+                <div className="mt-2 text-[11px] text-white/50">4 of 5 slots reserved</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
