@@ -74,6 +74,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
         <Toaster richColors position="top-right" />
+        <SupportChat />
       </div>
     </AuthProvider>
   );
