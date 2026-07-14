@@ -5,6 +5,7 @@ import { ScrollNavigationMenu } from "@/components/ui/scroll-navigation-menu";
 import { SiteFooter } from "@/components/SiteFooter";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "@/components/ui/sonner";
+import { SupportChat } from "@/components/SupportChat";
 
 function NotFoundComponent() {
   return (
