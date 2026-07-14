@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, useNavigate, Link, useLocation } from "@tansta
 import { useEffect } from "react";
 import { Loader2, LogOut, ShieldAlert, Newspaper, Briefcase, Package, Inbox, FolderKanban } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase } from "@/integrations/supabase/client";
+import { bootstrapFirstAdmin } from "@/lib/admin.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({
@@ -34,13 +34,13 @@ function AdminLayout() {
 
   async function grantSelfAdmin() {
     if (!user) return;
-    const { error } = await supabase.rpc("bootstrap_first_admin");
-    if (error) {
-      toast.error(error.message);
-      return;
+    try {
+      await bootstrapFirstAdmin();
+      toast.success("Admin role granted. Reloading…");
+      setTimeout(() => window.location.reload(), 600);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to grant admin");
     }
-    toast.success("Admin role granted. Reloading…");
-    setTimeout(() => window.location.reload(), 600);
   }
 
   if (loading) {
