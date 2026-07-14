@@ -155,7 +155,7 @@ function ChatWidget({
               ) : (
                 messages.map((m) => (
                   <Message from={m.role} key={m.id}>
-                    <MessageContent variant={m.role === "user" ? "contained" : "flat"}>
+                    <MessageContent>
                       {m.parts.map((part, i) => {
                         if (part.type === "text") {
                           return m.role === "assistant" ? (
