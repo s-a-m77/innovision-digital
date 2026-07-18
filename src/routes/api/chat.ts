@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
+import { createAiGatewayProvider } from "@/lib/ai-gateway.server";
 
 const SYSTEM_PROMPT = `You are Nexora Support, a friendly and knowledgeable customer support assistant for Nexora — a digital solutions company that builds modern products and services to help businesses solve real problems and scale with confidence.
 
@@ -26,10 +26,12 @@ export const Route = createFileRoute("/api/chat")({
         if (!Array.isArray(messages)) {
           return new Response("Messages are required", { status: 400 });
         }
-        const key = process.env.LOVABLE_API_KEY;
-        if (!key) return new Response("Missing LOVABLE_API_KEY", { status: 500 });
+        const apiKey = process.env.AI_GATEWAY_API_KEY;
+        const baseURL = process.env.AI_GATEWAY_BASE_URL;
+        if (!apiKey) return new Response("Missing AI_GATEWAY_API_KEY", { status: 500 });
+        if (!baseURL) return new Response("Missing AI_GATEWAY_BASE_URL", { status: 500 });
 
-        const gateway = createLovableAiGatewayProvider(key);
+        const gateway = createAiGatewayProvider(apiKey, baseURL);
         const result = streamText({
           model: gateway("google/gemini-3-flash-preview"),
           system: SYSTEM_PROMPT,
